@@ -19,6 +19,17 @@ exports.user_create_get = function (req, res) {
 
 exports.user_create_post = [
   //Validate and sanitise user signup form inputs
+  body("username").custom((username) => {
+    User.findOne({ username: username }).exec(function (err, found_user) {
+      if (found_user) {
+        console.log(found_user);
+        throw new Error("Chosen username already exists");
+      }
+    });
+    //Indicates success of custom validator
+    return true;
+  }),
+
   body("password", "Password must be at least 8 characters").isLength({
     min: 8,
   }),
@@ -49,40 +60,24 @@ exports.user_create_post = [
       return;
     } else {
       //Data from form is valid
-      //Check if username is taken
-      User.findOne({ username: req.body.username }).exec(function (
-        err,
-        found_user
-      ) {
+      //Create the new user and save to database
+
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
         if (err) {
           return next(err);
-        }
-        if (found_user) {
-          //user exists, redirect back to form with error message
-          res.render("sign-up-form", {
-            title: "Sign up form",
-            form_data: req.body,
-            errors: "Username already exists",
-          });
         } else {
-          bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+          console.log("creating user");
+          const user = new User({
+            username: req.body.username,
+            first_name: req.body.fname,
+            last_name: req.body.lname,
+            password: hashedPassword,
+          }).save((err) => {
+            console.log(user);
             if (err) {
               return next(err);
-            } else {
-              console.log("creating user");
-              const user = new User({
-                username: req.body.username,
-                first_name: req.body.fname,
-                last_name: req.body.lname,
-                password: hashedPassword,
-              }).save((err) => {
-                console.log(user);
-                if (err) {
-                  return next(err);
-                }
-                res.redirect("/");
-              });
             }
+            res.redirect("/");
           });
         }
       });
