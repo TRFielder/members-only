@@ -19,4 +19,7 @@ router.get("/login", user_controller.user_login_get);
 //POST request to log in user
 router.post("/login", user_controller.user_login_post);
 
+//GET request to log out user
+router.get("/logout", user_controller.user_logout_get);
+
 module.exports = router;

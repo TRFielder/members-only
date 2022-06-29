@@ -9,6 +9,7 @@ require("dotenv").config();
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const session = require("express-session");
 const User = require("./models/User");
 
 var indexRouter = require("./routes/index");
@@ -17,6 +18,7 @@ var app = express();
 
 //Connect to mongoDB
 const db_URI = process.env.DB_URI;
+const sessionSecret = process.env.SESSION_SECRET;
 
 mongoose.connect(db_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -25,6 +27,13 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+
+//Set up passportJS middleware
+app.use(
+  session({ secret: sessionSecret, resave: false, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(logger("dev"));
 app.use(express.json());

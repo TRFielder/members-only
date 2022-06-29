@@ -23,7 +23,6 @@ exports.user_create_post = [
   body("username").custom((username) => {
     User.findOne({ username: username }).exec(function (err, found_user) {
       if (found_user) {
-        console.log(found_user);
         throw new Error("Chosen username already exists");
       }
     });
@@ -66,14 +65,12 @@ exports.user_create_post = [
         if (err) {
           return next(err);
         } else {
-          console.log("creating user");
           const user = new User({
             username: req.body.username,
             first_name: req.body.fname,
             last_name: req.body.lname,
             password: hashedPassword,
           }).save((err) => {
-            console.log(user);
             if (err) {
               return next(err);
             }
@@ -89,10 +86,19 @@ exports.user_login_get = function (req, res) {
   res.render("login");
 };
 
-exports.user_login_post = function (req, res) {
-  console.log("Sending login request");
+exports.user_login_post = function (req, res, next) {
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/",
-  })(req, res);
+  })(req, res, next);
+};
+
+exports.user_logout_get = function (req, res) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    //User logged out, redirect to index
+    res.redirect("/");
+  });
 };
