@@ -4,12 +4,20 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const compression = require("compression");
+const mongoose = require("mongoose");
 require("dotenv").config();
 require("./modules/auth"); //Import passportJS strategy
 
 var indexRouter = require("./routes/index");
 
 var app = express();
+
+//Connect to mongoDB
+const db_URI = process.env.DB_URI;
+
+mongoose.connect(db_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

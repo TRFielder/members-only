@@ -5,12 +5,23 @@ block content
   form(action="" method="POST")
     div.form-group
         label(for="username") Username 
-        input(name="username" placeholder="Username" type="text")
+        input(name="username" placeholder="Username" type="text" required=true value=(undefined===form_data ? "" : form_data.username))
     div.form-group
         label(for="fname") First name
-        input(name="fname" placeholder="First name" type="text")
+        input(name="fname" placeholder="fname" type="text" required=true value=(undefined===form_data ? "" : form_data.fname))
     div.form-group
         label(for="fname") Last name
-        input(name="lname" placeholder="Last name" type="text")
+        input(name="lname" placeholder="lname" type="text" required=true value=(undefined===form_data ? "" : form_data.lname))
+    div.form-group
+        label(for="password") Password
+        input(name="password" type="password" required=true)
+    div.form-group
+        label(for="password_confirm") Confirm Password
+        input(name="password_confirm" type="password" required=true)
     div.form-group
         button(type="submit") Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
