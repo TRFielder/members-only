@@ -3,6 +3,7 @@ const User = require("../models/User");
 const { mongoose } = require("mongoose");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 exports.index = function (req, res) {
   res.render("index", {
@@ -61,7 +62,6 @@ exports.user_create_post = [
     } else {
       //Data from form is valid
       //Create the new user and save to database
-
       bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
         if (err) {
           return next(err);
@@ -84,3 +84,15 @@ exports.user_create_post = [
     }
   },
 ];
+
+exports.user_login_get = function (req, res) {
+  res.render("login");
+};
+
+exports.user_login_post = function (req, res) {
+  console.log("Sending login request");
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/",
+  })(req, res);
+};

@@ -13,4 +13,10 @@ router.get("/sign-up", user_controller.user_create_get);
 //POST request to sign up a user
 router.post("/sign-up", user_controller.user_create_post);
 
+//GET request for login form
+router.get("/login", user_controller.user_login_get);
+
+//POST request to log in user
+router.post("/login", user_controller.user_login_post);
+
 module.exports = router;

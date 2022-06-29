@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 Log in
+  form(action="" method="POST")
+    div.form-group
+        label(for="username") Username 
+        input(name="username" placeholder="Username" type="text" required=true value=(undefined===form_data ? "" : form_data.username))
+    div.form-group
+        label(for="password") Password
+        input(name="password" type="password" required=true)
+    div.form-group
+        button(type="submit") Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

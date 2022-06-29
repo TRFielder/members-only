@@ -4,6 +4,9 @@ block content
   h1= title
   if (user)
     p Welcome back, #{user.username}!
+    a(href="/logout") Log out
   else 
     p Welcome to the treehouse!
+    a(href="/login") Log in
+    br
     a(href="/sign-up") Sign up here!
