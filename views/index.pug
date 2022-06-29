@@ -2,4 +2,8 @@ extends layout
 
 block content
   h1= title
-  p Welcome to the #{title}
+  if (user)
+    p Welcome back, #{user.username}!
+  else 
+    p Welcome to the treehouse!
+    a(href="/sign-up") Sign up here!

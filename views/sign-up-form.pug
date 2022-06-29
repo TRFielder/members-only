@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Sign up 
+  form(action="" method="POST")
+    div.form-group
+        label(for="username") Username 
+        input(name="username" placeholder="Username" type="text")
+    div.form-group
+        label(for="fname") First name
+        input(name="fname" placeholder="First name" type="text")
+    div.form-group
+        label(for="fname") Last name
+        input(name="lname" placeholder="Last name" type="text")
+    div.form-group
+        button(type="submit") Submit
