@@ -11,3 +11,22 @@ a {
   flex-direction: column;
   align-items: center;
 }
+
+.message-container {
+  text-align: left;
+  min-width: 75%;
+  border: 2px solid black;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 10px;
+}
+
+.message-container > h4 {
+  margin: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .message-container {
+    min-width: 25%;
+  }
+}

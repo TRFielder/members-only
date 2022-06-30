@@ -76,6 +76,12 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+//Custom middleware to manage current user
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler

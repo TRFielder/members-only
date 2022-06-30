@@ -3,7 +3,14 @@ extends layout
 block content
   h1= title
   if (user)
-    p Welcome back, #{user.username}!
+    h3 Welcome back, #{user.username}!
+    each message in messages 
+      div.message-container 
+        h4=message.author.username 
+        p=message.text 
+        small=message.date 
+    a(href="/new-msg") Create Message
+    br
     a(href="/logout") Log out
   else 
     p Welcome to the treehouse!

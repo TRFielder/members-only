@@ -4,12 +4,24 @@ const { mongoose } = require("mongoose");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const Message = require("../models/Message");
+const async = require("async");
 
 exports.index = function (req, res) {
-  res.render("index", {
-    title: "Members only",
-    user: req.user,
-  });
+  Message.find()
+    .populate("author")
+    .sort([["timestamp", "descending"]])
+    .exec(function (err, all_messages) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so render
+      res.render("index", {
+        title: "Members only",
+        user: req.user,
+        messages: all_messages,
+      });
+    });
 };
 
 exports.user_create_get = function (req, res) {

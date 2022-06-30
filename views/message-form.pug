@@ -1,0 +1,16 @@
+extends layout 
+
+
+block content 
+    h1 New Message 
+
+    form(action="" method="POST")
+        div.form-group 
+            label(for="messageText") Enter your message: 
+            input(name="messageText" placeholder="Inspiring message goes here" required=true maxLength=280)
+        button(type="submit") Submit message 
+
+    if(errors)
+        ul 
+            for error in errors 
+             li!= error.msg

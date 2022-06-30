@@ -4,8 +4,8 @@ const { DateTime } = require("luxon");
 const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema({
-  username: { type: Schema.Types.ObjectId, ref: "User" }, //Reference to the user who posted the message
-  text: { type: String, required: true, maxLength: 280 },
+  author: { type: Schema.Types.ObjectId, ref: "User" }, //Reference to the user who posted the message
+  text: { type: String, maxLength: 280, required: true },
   timestamp: { type: Date, default: Date.now, required: true },
 });
 
