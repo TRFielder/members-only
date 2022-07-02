@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const Message = require("../models/Message");
 const async = require("async");
+require("dotenv").config();
 
 exports.index = function (req, res) {
   Message.find()
@@ -114,3 +115,48 @@ exports.user_logout_get = function (req, res) {
     res.redirect("/");
   });
 };
+
+exports.admin_register_get = function (req, res) {
+  if (res.locals.currentUser) {
+    res.render("admin-register");
+  } else {
+    res.redirect("/login");
+  }
+};
+
+exports.admin_register_post = [
+  body("passcode", "Admin passcode must be correct ").custom((passcode) => {
+    if (passcode !== process.env.ADMIN_PASSCODE) {
+      throw new Error("Incorrect passcode");
+    }
+    //Indicates success of custom validator
+    return true;
+  }),
+
+  (req, res, next) => {
+    //Extract the validation errors from a result
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      //There are errors. Render the form again with sanitised values/error messages
+      res.render("admin-register", {
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      //User has entered the correct passcode. Update their account with admin status
+      User.findByIdAndUpdate(
+        { _id: res.locals.currentUser._id },
+        { isAdmin: true },
+        function (err) {
+          if (err) {
+            return next(err);
+          } else {
+            //User added as admin successfully. Redirect to index
+            res.redirect("/");
+          }
+        }
+      );
+    }
+  },
+];

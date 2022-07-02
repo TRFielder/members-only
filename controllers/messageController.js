@@ -46,3 +46,28 @@ exports.create_message_post = [
     }
   },
 ];
+
+exports.delete_message_get = function (req, res) {
+  Message.findById(req.params.id)
+    .populate("author")
+    .exec(function (err, message) {
+      if (err) {
+        return next(err);
+      } else {
+        //Found the message, render it on the page
+        res.render("delete-msg", {
+          message: message,
+        });
+      }
+    });
+};
+
+exports.delete_message_post = function (req, res) {
+  Message.findByIdAndRemove(req.body.id, function (err) {
+    if (err) {
+      return next(err);
+    }
+    //Successfully deleted, redirect to index
+    res.redirect("/");
+  });
+};

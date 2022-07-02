@@ -4,16 +4,26 @@ block content
   h1= title
   if (user)
     h3 Welcome back, #{user.username}!
+    if (!user.isAdmin)
+      p Claim your admin rights #[a(href="admin-registration") here]
     each message in messages 
       div.message-container 
         h4=message.author.username 
         p=message.text 
         small=message.date 
+        if(user.isAdmin)
+          small.delete-btn #[a(href=message._id+ "/delete") Delete]
     a(href="/new-msg") Create Message
     br
     a(href="/logout") Log out
   else 
-    p Welcome to the treehouse!
-    a(href="/login") Log in
-    br
-    a(href="/sign-up") Sign up here!
+    h3 Welcome to the treehouse!
+    div.message-container 
+      h4 Life advice
+      p If you want to see who wrote the messages, you should #[a(href="/login") log in]. Don't have an account? Then  #[a(href="/sign-up") sign up] today!
+      small A long time ago
+    each message in messages 
+      div.message-container 
+        h4 Anonymous
+        p=message.text 
+        small Sometime
